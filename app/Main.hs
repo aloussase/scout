@@ -1,15 +1,18 @@
 module Main where
 
-import           Display
-import           Options
-import           Requests
+import           Scout.Display
+import           Scout.Options
+import           Scout.Requests
 
-import           Control.Lens ((^.))
+import           Control.Lens   ((^.))
 
 run :: Options -> IO ()
 run opts = case opts^.optCommand of
             SearchCommand searchOptions -> do
-                searchPackagesWithInfo (searchOptions^.searchQuery) >>= displayPackages
+                packages <- searchPackagesWithInfo
+                                (searchOptions^.searchSortDirection)
+                                (searchOptions^.searchQuery)
+                displayPackages packages
 
 main :: IO ()
 main = getOptions >>= run

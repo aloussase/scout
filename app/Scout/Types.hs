@@ -1,4 +1,4 @@
-module Types where
+module Scout.Types where
 
 import           Control.Lens       (makeLenses)
 import           Data.Aeson
@@ -8,7 +8,9 @@ import           Data.Text          (Text)
 import           Data.Time.Clock    (UTCTime)
 import           GHC.Generics
 
+type SearchQuery = Text
 type Revision = Text
+type PageNumber = Int
 type PackageName = Text
 
 data DisplayAndUri = MkDisplayAndUri

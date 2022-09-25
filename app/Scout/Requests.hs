@@ -1,17 +1,19 @@
-module Requests
+module Scout.Requests
 (
       searchPackages
     , searchPackageInfo
     , searchPackagesWithInfo
 ) where
 
-import           Types
+import           Scout.Options.Search (SortDirection)
+import           Scout.Types
 
-import           Control.Lens       ((&), (.~), (^.))
-import           Control.Monad      (forM)
-import           Data.Default.Class (def)
-import qualified Data.Map           as M
-import           Data.Text          (Text)
+import           Control.Lens         ((&), (.~), (^.))
+import           Control.Monad        (forM)
+import           Data.Default.Class   (def)
+import qualified Data.Map             as M
+import           Data.Text            (Text)
+import qualified Data.Text            as T
 import           Network.HTTP.Req
 
 hackage :: Url 'Https
@@ -31,26 +33,31 @@ searchPackageInfo package = runReq defaultHttpConfig $ do
     . responseBody @(JsonResponse (M.Map Text Text))
     <$> req GET (packageInfoEndpoint package) NoReqBody jsonResponse mempty
 
-searchPackages_ :: Int -> Text -> IO PackageSearchResponsePayload
-searchPackages_ pageNumber query = runReq defaultHttpConfig $ do
+searchPackages_ ::
+    SortDirection
+    -> PageNumber
+    -> SearchQuery
+    -> IO PackageSearchResponsePayload
+searchPackages_ sortDirection_ pageNumber query = runReq defaultHttpConfig $ do
     responseBody
       <$> req
             POST
             packageSearchEndpoint
-            (ReqBodyJson $ def
+            ( ReqBodyJson $ def
                             & searchQuery .~ query
-                            & page .~ pageNumber)
+                            & page .~ pageNumber
+                            & sortDirection .~ (T.pack . show $ sortDirection_) )
             jsonResponse
-            (header "Content-Type" "application/json")
+            ( header "Content-Type" "application/json" )
 
 -- | Search for packages matching a given query.
-searchPackages :: Text -> IO PackageSearchResponsePayload
-searchPackages = searchPackages_ 0
+searchPackages :: SortDirection -> SearchQuery -> IO PackageSearchResponsePayload
+searchPackages sortDirection_ = searchPackages_ sortDirection_ 0
 
 -- | Return a list of @PackageSearchResultInfo@ and their latest revision number.
-searchPackagesWithInfo :: Text -> IO [(Revision, PackageSearchResultInfo)]
-searchPackagesWithInfo query = do
-    packages <- searchPackages query
+searchPackagesWithInfo :: SortDirection -> SearchQuery -> IO [(Revision, PackageSearchResultInfo)]
+searchPackagesWithInfo sortDirection_ query = do
+    packages <- searchPackages sortDirection_ query
     forM (packages ^. pageContents) $ \package -> do
         packageInfo <- searchPackageInfo $ package ^. name . display
         pure $ case packageInfo of

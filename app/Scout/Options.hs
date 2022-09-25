@@ -1,36 +1,33 @@
-module Options
+module Scout.Options
 (
       getOptions
     , Command (..)
     , optCommand
     , searchQuery
+    , searchOutputLimit
+    , searchSortDirection
     , Options
 ) where
 
-import           Control.Lens        (makeLenses)
-import           Data.Text           (Text)
+import           Scout.Options.Search
+
+import           Control.Lens         (makeLenses)
 import           Options.Applicative
 
-newtype Options = MkOptions { _optCommand :: Command }
-    deriving (Show)
-
-newtype SearchOptions = MkSearchOptions { _searchQuery :: Text }
+newtype Options = MkOptions
+    { _optCommand :: Command
+    }
     deriving (Show)
 
 newtype Command = SearchCommand SearchOptions
     deriving (Show)
 
 makeLenses ''Options
-makeLenses ''SearchOptions
-
-searchCommand :: Parser Command
-searchCommand = SearchCommand . MkSearchOptions
-                 <$> argument str (metavar "QUERY" <> help "Search in package descriptions")
 
 parseCommand :: Parser Command
 parseCommand =
     hsubparser
-        ( command "search" ( info searchCommand (progDesc "Search packages in Hackage")  ) )
+        ( command "search" ( info (SearchCommand <$> searchCommand) (progDesc "Search packages in Hackage")  ) )
 
 parseOptions :: Parser Options
 parseOptions = MkOptions <$> parseCommand

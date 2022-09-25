@@ -1,6 +1,6 @@
-module Display where
+module Scout.Display where
 
-import           Types
+import           Scout.Types
 
 import           Control.Lens        ((^.))
 import           Control.Monad       (forM_)

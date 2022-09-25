@@ -15,7 +15,12 @@ extra-source-files: README.md
 executable scout
     main-is:          Main.hs
     ghc-options:      -Wall -Wunused-packages
-    other-modules:    Types, Requests, Options, Display
+    other-modules:
+          Scout.Types
+        , Scout.Display
+        , Scout.Options
+        , Scout.Options.Search
+        , Scout.Requests
 
     build-depends:
             base                              ^>=4.14.3.0
