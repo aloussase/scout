@@ -1,0 +1,32 @@
+cabal-version:      3.0
+name:               scout
+version:            0.1.0.0
+synopsis:           Search packages in Hackage
+-- A longer description of the package.
+-- description:
+bug-reports:        https://github.com/aloussase/scout/issues
+license:            MIT
+author:             Alexander Goussas
+maintainer:         goussasalexander@gmail.com
+copyright:          Alexander Goussas 2022
+category:           Cli
+extra-source-files: README.md
+
+executable scout
+    main-is:          Main.hs
+    ghc-options:      -Wall -Wunused-packages
+    other-modules:    Types, Requests, Options
+
+    build-depends:
+            base                              ^>=4.14.3.0
+          , aeson                             >= 2.1.1 && < 2.2
+          , text                              >= 1.2.4 && < 1.3
+          , ansi-terminal                     >= 0.11.3 && < 0.12
+          , optparse-applicative              >= 0.17.0 && < 0.18
+          , req                               >= 3.13.0 && < 3.14
+          , lens
+          , time
+
+    hs-source-dirs:   app
+    default-language: Haskell2010
+    default-extensions: OverloadedStrings, TemplateHaskell, DeriveGeneric
