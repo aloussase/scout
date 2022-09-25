@@ -3,6 +3,7 @@ module Scout.Requests
       searchPackages
     , searchPackageInfo
     , searchPackagesWithInfo
+    , hackage
 ) where
 
 import           Scout.Options.Search (SortDirection)

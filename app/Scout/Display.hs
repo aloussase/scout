@@ -4,6 +4,7 @@ module Scout.Display
 )
 where
 
+import           Scout.Requests      (hackage)
 import           Scout.Types
 
 import           Control.Lens        ((^.))
@@ -11,6 +12,7 @@ import           Control.Monad       (forM_)
 import           Data.Text           (Text)
 import qualified Data.Text           as T
 import qualified Data.Text.IO        as TIO
+import           Network.HTTP.Req    (renderUrl, (/:))
 import           System.Console.ANSI
 
 putInfos :: [(Text, Text)] -> IO ()
@@ -30,6 +32,7 @@ displayPackages_ packages = forM_ packages $ \(revision, package) -> do
              , ("downloads", tshow $ package^.downloads)
              , ("votes", tshow $ package^.votes)
              , ("last upload", tshow $ package^.lastUpload)
+             , ("uri", renderUrl $ hackage /: package ^. name . uri)
              ]
     putStrLn ""
 
