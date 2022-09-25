@@ -19,12 +19,13 @@ putInfo key value = do
     setSGR [ Reset ]
     TIO.putStrLn value
 
-displayPackages :: [PackageSearchResultInfo] -> IO ()
-displayPackages packages = forM_ packages $ \package -> do
-    TIO.putStrLn $ package ^. name . display
+displayPackages :: [(Revision, PackageSearchResultInfo)] -> IO ()
+displayPackages packages = forM_ packages $ \(revision, package) -> do
+    TIO.putStrLn $ package ^. name . display <> "/" <> revision
     putInfos [ ("description", package^.description)
              , ("downloads", tshow $ package^.downloads)
              , ("votes", tshow $ package^.votes)
+             , ("last upload", tshow $ package^.lastUpload)
              ]
     putStrLn ""
 

@@ -3,14 +3,13 @@ module Main where
 import           Display
 import           Options
 import           Requests
-import           Types        (pageContents)
 
-import           Control.Lens (view, (^.))
+import           Control.Lens ((^.))
 
 run :: Options -> IO ()
 run opts = case opts^.optCommand of
-            SearchCommand searchOptions ->
-                searchPackages (searchOptions^.searchQuery) >>= displayPackages . view pageContents
+            SearchCommand searchOptions -> do
+                searchPackagesWithInfo (searchOptions^.searchQuery) >>= displayPackages
 
 main :: IO ()
 main = getOptions >>= run

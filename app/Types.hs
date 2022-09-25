@@ -8,6 +8,8 @@ import           Data.Text          (Text)
 import           Data.Time.Clock    (UTCTime)
 import           GHC.Generics
 
+type Revision = Text
+type PackageName = Text
 
 data DisplayAndUri = MkDisplayAndUri
                     { _display :: !Text
@@ -62,3 +64,4 @@ instance Default PackageSearchRequestPayload where
             , _sortDirection = "descending"
             , _searchQuery = ""
             }
+
