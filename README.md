@@ -20,13 +20,18 @@ Available commands:
   search                   Search packages in Hackage
 ```
 
-## Unix philosophy
+## Example
 
-Each package output consists of 5 lines, plus a blank line. So to list the first
-3 packages:
+List the first 3 packages:
 
 ```shell
-scout search aeson | head -n 18
+scout search aeson --limit 3
+```
+
+Find the package with the most downloads and copy its uri to the clipboard:
+
+```shell
+scout search megaparsec --limit 1 | awk '/uri/ {print $3}' | xclip -sel clip
 ```
 
 ## Todo
