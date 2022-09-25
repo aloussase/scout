@@ -1,5 +1,13 @@
-module Options ( getOptions ) where
+module Options
+(
+      getOptions
+    , Command (..)
+    , optCommand
+    , searchQuery
+    , Options
+) where
 
+import           Control.Lens        (makeLenses)
 import           Data.Text           (Text)
 import           Options.Applicative
 
@@ -11,6 +19,9 @@ newtype SearchOptions = MkSearchOptions { _searchQuery :: Text }
 
 newtype Command = SearchCommand SearchOptions
     deriving (Show)
+
+makeLenses ''Options
+makeLenses ''SearchOptions
 
 searchCommand :: Parser Command
 searchCommand = SearchCommand . MkSearchOptions

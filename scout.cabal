@@ -15,7 +15,7 @@ extra-source-files: README.md
 executable scout
     main-is:          Main.hs
     ghc-options:      -Wall -Wunused-packages
-    other-modules:    Types, Requests, Options
+    other-modules:    Types, Requests, Options, Display, Constants
 
     build-depends:
             base                              ^>=4.14.3.0
@@ -26,6 +26,7 @@ executable scout
           , req                               >= 3.13.0 && < 3.14
           , lens
           , time
+          , data-default-class
 
     hs-source-dirs:   app
     default-language: Haskell2010
