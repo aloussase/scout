@@ -14,7 +14,7 @@ extra-source-files: README.md
 
 executable scout
     main-is:          Main.hs
-    ghc-options:      -Wall -Wunused-packages
+    ghc-options:      -Wall -Wunused-packages -O2
     other-modules:
           Scout.Types
         , Scout.Display
@@ -29,10 +29,11 @@ executable scout
           , ansi-terminal                     >= 0.11.3 && < 0.12
           , optparse-applicative              >= 0.17.0 && < 0.18
           , req                               >= 3.13.0 && < 3.14
-          , lens
-          , time
-          , data-default-class
-          , containers
+          , containers                        >= 0.6.5 && < 0.7
+          , time                              >= 1.9.3 && < 1.10
+          , async                             >= 2.2.4 && < 2.3
+          , data-default-class                >= 0.1.2 && < 0.2
+          , lens                              >= 5.2 && < 5.3
 
     hs-source-dirs:   app
     default-language: Haskell2010
