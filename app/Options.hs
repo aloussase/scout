@@ -25,12 +25,12 @@ makeLenses ''SearchOptions
 
 searchCommand :: Parser Command
 searchCommand = SearchCommand . MkSearchOptions
-                 <$> argument str (metavar "QUERY" <> help "The name of a package to look for")
+                 <$> argument str (metavar "QUERY" <> help "Search in package descriptions")
 
 parseCommand :: Parser Command
 parseCommand =
     hsubparser
-        ( command "search" ( info searchCommand (progDesc "Search packages in hackage")  ) )
+        ( command "search" ( info searchCommand (progDesc "Search packages in Hackage")  ) )
 
 parseOptions :: Parser Options
 parseOptions = MkOptions <$> parseCommand
