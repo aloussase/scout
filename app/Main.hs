@@ -12,7 +12,7 @@ run opts = case opts^.optCommand of
                 packages <- searchPackagesWithInfo
                                 (searchOptions^.searchSortDirection)
                                 (searchOptions^.searchQuery)
-                displayPackages packages
+                displayPackages (searchOptions^.searchOutputLimit) packages
 
 main :: IO ()
 main = getOptions >>= run

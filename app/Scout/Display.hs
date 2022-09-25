@@ -1,4 +1,8 @@
-module Scout.Display where
+module Scout.Display
+(
+    displayPackages
+)
+where
 
 import           Scout.Types
 
@@ -19,8 +23,8 @@ putInfo key value = do
     setSGR [ Reset ]
     TIO.putStrLn value
 
-displayPackages :: [(Revision, PackageSearchResultInfo)] -> IO ()
-displayPackages packages = forM_ packages $ \(revision, package) -> do
+displayPackages_ :: [(Revision, PackageSearchResultInfo)] -> IO ()
+displayPackages_ packages = forM_ packages $ \(revision, package) -> do
     TIO.putStrLn $ package ^. name . display <> "/" <> revision
     putInfos [ ("description", package^.description)
              , ("downloads", tshow $ package^.downloads)
@@ -28,6 +32,9 @@ displayPackages packages = forM_ packages $ \(revision, package) -> do
              , ("last upload", tshow $ package^.lastUpload)
              ]
     putStrLn ""
+
+displayPackages :: Int -> [(Revision, PackageSearchResultInfo)] -> IO ()
+displayPackages limit = displayPackages_ . take limit
 
 tshow :: (Show a) => a -> Text
 tshow = T.pack . show

@@ -13,7 +13,11 @@ import           Control.Lens        (makeLenses)
 import           Data.Text           (Text)
 import           Options.Applicative
 
-data SortDirection = Asc | Desc deriving Show
+data SortDirection = Asc | Desc
+
+instance Show SortDirection where
+    show Asc  = "ascending"
+    show Desc = "descending"
 
 data SearchOptions = MkSearchOptions
     { _searchQuery         :: !Text
