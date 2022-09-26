@@ -16,7 +16,7 @@ hackage :: Url 'Https
 hackage = https "hackage.haskell.org"
 
 renderPackageUri :: PackageSearchResultInfo -> Text
-renderPackageUri package = renderUrl $ hackage /: package ^. name . uri
+renderPackageUri package = renderUrl $ hackage /: T.tail (package ^. name . uri)
 
 projectFields :: PackageSearchResultInfo -> [DisplayField] -> [Text]
 projectFields package = foldl' f []
