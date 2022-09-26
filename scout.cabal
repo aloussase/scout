@@ -18,9 +18,13 @@ executable scout
     other-modules:
           Scout.Types
         , Scout.Display
+        , Scout.Display.Apt
+        , Scout.Display.Csv
         , Scout.Options
+        , Scout.Options.Format
         , Scout.Options.Search
         , Scout.Requests
+        , Scout.Util
 
     build-depends:
             base                              ^>=4.14.3.0

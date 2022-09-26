@@ -3,23 +3,19 @@ module Scout.Requests
       searchPackages
     , searchPackageInfo
     , searchPackagesWithInfo
-    , hackage
 ) where
 
 import           Scout.Options.Search     (SortDirection)
 import           Scout.Types
+import           Scout.Util               (hackage)
 
 import           Control.Concurrent.Async (forConcurrently)
 import           Control.Lens             ((&), (.~), (^.))
-import           Control.Monad            (forM)
 import           Data.Default.Class       (def)
 import qualified Data.Map                 as M
 import           Data.Text                (Text)
 import qualified Data.Text                as T
 import           Network.HTTP.Req
-
-hackage :: Url 'Https
-hackage = https "hackage.haskell.org"
 
 packageSearchEndpoint :: Url 'Https
 packageSearchEndpoint = hackage /: "packages" /: "search"

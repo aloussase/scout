@@ -2,20 +2,24 @@ module Scout.Options
 (
       getOptions
     , Command (..)
+    , fmtDisplayFormat
+    , fmtOutputLimit
+    , formatOptions
     , optCommand
     , searchQuery
-    , searchOutputLimit
     , searchSortDirection
     , Options
 ) where
 
+import           Scout.Options.Format
 import           Scout.Options.Search
 
 import           Control.Lens         (makeLenses)
 import           Options.Applicative
 
-newtype Options = MkOptions
-    { _optCommand :: Command
+data Options = MkOptions
+    { _optCommand    :: !Command
+    , _formatOptions :: !FormatOptions
     }
     deriving (Show)
 
@@ -27,10 +31,10 @@ makeLenses ''Options
 parseCommand :: Parser Command
 parseCommand =
     hsubparser
-        ( command "search" ( info (SearchCommand <$> searchCommand) (progDesc "Search packages in Hackage")  ) )
+        ( command "search" ( info (SearchCommand <$> parseSearchOptions) (progDesc "Search packages in Hackage")  ) )
 
 parseOptions :: Parser Options
-parseOptions = MkOptions <$> parseCommand
+parseOptions = MkOptions <$> parseCommand <*> parseFormatOptions
 
 opts :: ParserInfo Options
 opts = info (parseOptions <**> helper)

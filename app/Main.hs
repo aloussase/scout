@@ -11,10 +11,13 @@ run :: Options -> IO ()
 run opts = case opts^.optCommand of
             SearchCommand searchOptions -> do
                 TIO.putStrLn $ "Searching for \"" <> (searchOptions^.searchQuery) <> "\"..."
-                packages <- searchPackagesWithInfo
-                                (searchOptions^.searchSortDirection)
-                                (searchOptions^.searchQuery)
-                displayPackages (searchOptions^.searchOutputLimit) packages
+                searchPackagesWithInfo
+                    (searchOptions^.searchSortDirection)
+                    (searchOptions^.searchQuery)
+                >>=
+                displayPackages
+                    (opts^.formatOptions.fmtDisplayFormat)
+                    (opts^.formatOptions.fmtOutputLimit)
 
 main :: IO ()
 main = getOptions >>= run

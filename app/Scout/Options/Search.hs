@@ -3,9 +3,8 @@ module Scout.Options.Search
       SearchOptions
     , SortDirection
     , searchQuery
-    , searchOutputLimit
     , searchSortDirection
-    , searchCommand
+    , parseSearchOptions
 )
 where
 
@@ -21,19 +20,9 @@ instance Show SortDirection where
 
 data SearchOptions = MkSearchOptions
     { _searchQuery         :: !Text
-    , _searchOutputLimit   :: !Int
     , _searchSortDirection :: !SortDirection
     }
     deriving (Show)
-
-parseOutputLimit :: Parser Int
-parseOutputLimit = option auto
-                    (  long "limit"
-                    <> short 'l'
-                    <> help "How many packages to show in the output"
-                    <> showDefault
-                    <> value 16
-                    <> metavar "INT" )
 
 parseSortDirection :: Parser SortDirection
 parseSortDirection = option (eitherReader parseSortDirection')
@@ -48,10 +37,9 @@ parseSortDirection = option (eitherReader parseSortDirection')
         parseSortDirection' "descending" = Right Desc
         parseSortDirection' _ = Left "expected either 'ascending' or 'descending'"
 
-searchCommand :: Parser SearchOptions
-searchCommand = MkSearchOptions
+parseSearchOptions :: Parser SearchOptions
+parseSearchOptions = MkSearchOptions
       <$> argument str (metavar "QUERY" <> help "Search in package descriptions")
-      <*> parseOutputLimit
       <*> parseSortDirection
 
 makeLenses ''SearchOptions
