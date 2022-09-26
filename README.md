@@ -11,7 +11,7 @@ scout --help
 ```
 scout - CLI tool for scouting packages in Hackage
 
-Usage: scout COMMAND [-l|--limit INT] [-f|--format apt, csv]
+Usage: scout COMMAND [-l|--limit INT] [-f|--format apt, csv] [-s|--select ARG]
 
   Scout Hackage packages
 
@@ -19,6 +19,8 @@ Available options:
   -l,--limit INT           How many packages to show in the output (default: 16)
   -f,--format apt, csv     Format in which to display search results
                            (default: Apt)
+  -s,--select ARG          Fields from package info to output
+                           (default: [Description,Downloads,LastUpload,Name,Uri,Votes])
   -h,--help                Show this help text
 
 Available commands:

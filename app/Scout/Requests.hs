@@ -5,7 +5,7 @@ module Scout.Requests
     , searchPackagesWithInfo
 ) where
 
-import           Scout.Options.Search     (SortDirection)
+import qualified Scout.Options.Search     as S
 import           Scout.Types
 import           Scout.Util               (hackage)
 
@@ -32,7 +32,7 @@ searchPackageInfo package = runReq defaultHttpConfig $ do
     <$> req GET (packageInfoEndpoint package) NoReqBody jsonResponse mempty
 
 searchPackages_ ::
-    SortDirection
+    S.SortDirection
     -> PageNumber
     -> SearchQuery
     -> IO PackageSearchResponsePayload
@@ -49,13 +49,16 @@ searchPackages_ sortDirection_ pageNumber query = runReq defaultHttpConfig $ do
             ( header "Content-Type" "application/json" )
 
 -- | Search for packages matching a given query.
-searchPackages :: SortDirection -> SearchQuery -> IO PackageSearchResponsePayload
-searchPackages sortDirection_ = searchPackages_ sortDirection_ 0
+searchPackages :: S.SearchOptions -> IO PackageSearchResponsePayload
+searchPackages opts =
+    let sortDirection_ = opts ^. S.searchSortDirection
+        query = opts ^. S.searchQuery
+     in searchPackages_ sortDirection_ 0 query
 
 -- | Return a list of @PackageSearchResultInfo@ and their latest revision number.
-searchPackagesWithInfo :: SortDirection -> SearchQuery -> IO [(Revision, PackageSearchResultInfo)]
-searchPackagesWithInfo sortDirection_ query = do
-    packages <- searchPackages sortDirection_ query
+searchPackagesWithInfo :: S.SearchOptions -> IO [(Revision, PackageSearchResultInfo)]
+searchPackagesWithInfo opts = do
+    packages <- searchPackages opts
     forConcurrently (packages ^. pageContents) $ \package -> do
         packageInfo <- searchPackageInfo $ package ^. name . display
         pure $ case packageInfo of

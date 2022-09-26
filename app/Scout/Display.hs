@@ -6,9 +6,16 @@ where
 
 import qualified Scout.Display.Apt    as Apt
 import qualified Scout.Display.Csv    as Csv
-import           Scout.Options.Format (DisplayFormat (..))
+import           Scout.Options.Format
 import           Scout.Types
 
-displayPackages :: DisplayFormat -> Int -> [(Revision, PackageSearchResultInfo)] -> IO ()
-displayPackages Apt limit = Apt.displayPackages . take limit
-displayPackages Csv limit = Csv.displayPackages . take limit
+import           Control.Lens
+
+displayPackages :: FormatOptions -> [(Revision, PackageSearchResultInfo)] -> IO ()
+displayPackages opts packages =
+    let format = opts^.fmtDisplayFormat
+        limit = opts^.fmtOutputLimit
+        packages' = take limit packages
+    in case format of
+        Apt -> Apt.displayPackages opts packages'
+        Csv -> Csv.displayPackages opts packages'

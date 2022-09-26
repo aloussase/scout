@@ -8,16 +8,11 @@ import           Control.Lens   ((^.))
 import qualified Data.Text.IO   as TIO
 
 run :: Options -> IO ()
-run opts = case opts^.optCommand of
-            SearchCommand searchOptions -> do
-                TIO.putStrLn $ "Searching for \"" <> (searchOptions^.searchQuery) <> "\"..."
-                searchPackagesWithInfo
-                    (searchOptions^.searchSortDirection)
-                    (searchOptions^.searchQuery)
-                >>=
-                displayPackages
-                    (opts^.formatOptions.fmtDisplayFormat)
-                    (opts^.formatOptions.fmtOutputLimit)
+run opts =
+    case opts^.optCommand of
+      SearchCommand searchOptions -> do
+          TIO.putStrLn $ "Searching for \"" <> (searchOptions^.searchQuery) <> "\"..."
+          searchPackagesWithInfo searchOptions >>= displayPackages (opts^.formatOptions)
 
 main :: IO ()
 main = getOptions >>= run

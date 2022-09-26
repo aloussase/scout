@@ -2,21 +2,33 @@ module Scout.Options.Format
 (
       parseFormatOptions
     , DisplayFormat (..)
+    , DisplayField (..)
     , FormatOptions
     , fmtDisplayFormat
     , fmtOutputLimit
+    , fmtDisplayFields
 )
 where
 
 import           Control.Lens        (makeLenses)
+import           Data.List           (foldl')
+import qualified Data.Text           as T
 import           Options.Applicative
 
 
 data DisplayFormat = Apt | Csv deriving Show
+data DisplayField = Description
+                    | Downloads
+                    | LastUpload
+                    | Name
+                    | Uri
+                    | Votes
+                    deriving Show
 
 data FormatOptions = MkFormatOptions
     { _fmtOutputLimit   :: !Int
     , _fmtDisplayFormat :: !DisplayFormat
+    , _fmtDisplayFields :: ![DisplayField]
     }
     deriving Show
 
@@ -46,5 +58,28 @@ parseDisplayFormat = option (eitherReader parseDisplayFormat')
         parseDisplayFormat' _     = Left "expected one of 'apt' or 'csv'"
 
 
+parseDisplayFields :: Parser [DisplayField]
+parseDisplayFields = option (eitherReader parseDisplayFields')
+                    ( long "select"
+                    <> short 's'
+                    <> help "Fields from package info to output"
+                    <> showDefault
+                    <> value [Description,Downloads,LastUpload,Name,Uri,Votes]
+                    )
+    where
+        parseDisplayFields' :: String -> Either String [DisplayField]
+        parseDisplayFields' s = sequence (foldl' (\xs x -> f x : xs) [] (T.splitOn "," $ T.pack s))
+
+        f "description" = Right Description
+        f "downloads"   = Right Downloads
+        f "lastUpload"  = Right LastUpload
+        f "name"        = Right Name
+        f "uri"         = Right Uri
+        f "votes"       = Right Votes
+        f field         = Left $ "not a valid field " <> T.unpack field
+
 parseFormatOptions :: Parser FormatOptions
-parseFormatOptions = MkFormatOptions <$> parseOutputLimit <*> parseDisplayFormat
+parseFormatOptions = MkFormatOptions
+                <$> parseOutputLimit
+                <*> parseDisplayFormat
+                <*> parseDisplayFields

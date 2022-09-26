@@ -1,17 +1,18 @@
 module Scout.Display.Apt ( displayPackages ) where
 
+import           Scout.Options.Format
 import           Scout.Types
-import           Scout.Util          (renderPackageUri, tshow)
+import           Scout.Util           (renderPackageUri, tshow)
 
-import           Control.Lens        ((^.))
-import           Control.Monad       (forM_)
-import           Data.Text           (Text)
-import qualified Data.Text.IO        as TIO
+import           Control.Lens         ((^.))
+import           Control.Monad        (forM_)
+import           Data.Text            (Text)
+import qualified Data.Text.IO         as TIO
 import           System.Console.ANSI
 
 -- | Display a list of packages in `apt search` output style.
-displayPackages :: [(Revision, PackageSearchResultInfo)] -> IO ()
-displayPackages packages = forM_ packages $ \(revision, package) -> do
+displayPackages :: FormatOptions -> [(Revision, PackageSearchResultInfo)] -> IO ()
+displayPackages _ packages = forM_ packages $ \(revision, package) -> do
     TIO.putStrLn $ package ^. name . display <> "/" <> revision
     putInfos [ ("description", package^.description)
         , ("downloads", tshow $ package^.downloads)
