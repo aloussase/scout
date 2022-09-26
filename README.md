@@ -47,9 +47,30 @@ Output only the name and uri fields (only works in csv mode):
 scout search scotty --format csv --select name,uri
 ```
 
+## Neovim - Telescope extension
+
+The repository contains a [telescope](https://github.com/nvim-telescope/telescope.nvim)
+extension in the `vim` directory that can be used to dynamically search for
+packages and open the selected one's Hackage url in the browser.
+
+You can install the extension using [packer](https://github.com/wbthomason/packer.nvim):
+
+```lua
+use {
+    'aloussase/scout',
+    rtp = 'vim'
+}
+```
+
+And then load the extension:
+
+```lua
+require('telescope').load_extension('scout')
+```
+
 ## Todo
 
-- [ ] Different output formats
+- [x] Different output formats
 - [ ] No color option
 
 ## License
