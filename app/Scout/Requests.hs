@@ -6,15 +6,16 @@ module Scout.Requests
     , hackage
 ) where
 
-import           Scout.Options.Search (SortDirection)
+import           Scout.Options.Search     (SortDirection)
 import           Scout.Types
 
-import           Control.Lens         ((&), (.~), (^.))
-import           Control.Monad        (forM)
-import           Data.Default.Class   (def)
-import qualified Data.Map             as M
-import           Data.Text            (Text)
-import qualified Data.Text            as T
+import           Control.Concurrent.Async (forConcurrently)
+import           Control.Lens             ((&), (.~), (^.))
+import           Control.Monad            (forM)
+import           Data.Default.Class       (def)
+import qualified Data.Map                 as M
+import           Data.Text                (Text)
+import qualified Data.Text                as T
 import           Network.HTTP.Req
 
 hackage :: Url 'Https
@@ -59,7 +60,7 @@ searchPackages sortDirection_ = searchPackages_ sortDirection_ 0
 searchPackagesWithInfo :: SortDirection -> SearchQuery -> IO [(Revision, PackageSearchResultInfo)]
 searchPackagesWithInfo sortDirection_ query = do
     packages <- searchPackages sortDirection_ query
-    forM (packages ^. pageContents) $ \package -> do
+    forConcurrently (packages ^. pageContents) $ \package -> do
         packageInfo <- searchPackageInfo $ package ^. name . display
         pure $ case packageInfo of
                 (x:_) -> (x, package)
