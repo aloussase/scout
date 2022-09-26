@@ -9,11 +9,16 @@ scout --help
 ```
 
 ```
-Usage: scout COMMAND
+scout - CLI tool for scouting packages in Hackage
+
+Usage: scout COMMAND [-l|--limit INT] [-f|--format apt, csv]
 
   Scout Hackage packages
 
 Available options:
+  -l,--limit INT           How many packages to show in the output (default: 16)
+  -f,--format apt, csv     Format in which to display search results
+                           (default: Apt)
   -h,--help                Show this help text
 
 Available commands:

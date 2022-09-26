@@ -38,6 +38,7 @@ parseDisplayFormat = option (eitherReader parseDisplayFormat')
                     <> help "Format in which to display search results"
                     <> showDefault
                     <> value Apt
+                    <> metavar "apt, csv"
                     )
     where
         parseDisplayFormat' "apt" = Right Apt
