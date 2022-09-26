@@ -41,6 +41,12 @@ Find the package with the most downloads and copy its uri to the clipboard:
 scout search megaparsec --limit 1 | awk '/uri/ {print $3}' | xclip -sel clip
 ```
 
+Output only the name and uri fields (only works in csv mode):
+
+```shell
+scout search scotty --format csv --select name,uri
+```
+
 ## Todo
 
 - [ ] Different output formats

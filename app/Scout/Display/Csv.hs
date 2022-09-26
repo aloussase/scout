@@ -11,6 +11,6 @@ import qualified Data.Text.IO         as TIO
 
 -- | Display a list of packages as CSV.
 displayPackages :: FormatOptions -> [(Revision, PackageSearchResultInfo)] -> IO ()
-displayPackages opts packages = do
+displayPackages opts packages =
     let texts = map (flip U.projectFields (opts^.fmtDisplayFields) . snd) packages
-    forM_ texts (TIO.putStrLn . T.intercalate ",")
+     in forM_ texts (TIO.putStrLn . T.intercalate ",")

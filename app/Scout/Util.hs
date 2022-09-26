@@ -26,5 +26,5 @@ projectFields package = foldl' f []
         f xs Downloads   = tshow (package ^. downloads) : xs
         f xs LastUpload  = tshow (package ^. lastUpload) : xs
         f xs Name        = package ^. name . display : xs
-        f xs Uri         = package ^. name . uri : xs
+        f xs Uri         = renderPackageUri package : xs
         f xs Votes       = tshow (package ^. votes) : xs
