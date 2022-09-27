@@ -49,7 +49,7 @@ scout search scotty --format csv --select name,uri
 
 ## Neovim - Telescope extension
 
-[Imgur](https://i.imgur.com/cOPE7cz.gifv)
+[scout demo](https://i.imgur.com/cOPE7cz.gif)
 
 The repository contains a [telescope](https://github.com/nvim-telescope/telescope.nvim)
 extension in the `vim` directory that can be used to dynamically search for
