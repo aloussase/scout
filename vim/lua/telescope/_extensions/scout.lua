@@ -7,6 +7,12 @@ local scout_picker = require('telescope._extensions.scout.picker')
 
 return telescope.register_extension {
   exports = {
-    scout = function(opts) scout_picker(opts or {}) end,
+    scout = function(opts)
+      if vim.fn.executable('scout') ~= 1 then
+        vim.notify('could not find scout executable', vim.log.levels.ERROR)
+        return
+      end
+      scout_picker(opts or {}) 
+    end,
   }
 }
