@@ -1,6 +1,20 @@
 # scout
 
-CLI tool for scouting packages on [Hackage](https://hackage.haskell.org/).
+CLI tool for searching packages on [Hackage](https://hackage.haskell.org/).
+
+## Install
+
+Build with [cabal](https://cabal.readthedocs.io/en/3.4/getting-started.html) or
+grab a binary from the [releases](https://github.com/aloussase/scout/releases)
+page.
+
+```bash
+git clone https:/github.com/aloussase/scout.git
+cd scout
+cabal install
+```
+
+The project uses GHC version 9.0.2, so make sure you are using that to install.
 
 ## Usage
 
@@ -41,7 +55,7 @@ Find the package with the most downloads and copy its uri to the clipboard:
 scout search megaparsec --limit 1 | awk '/uri/ {print $3}' | xclip -sel clip
 ```
 
-Output only the name and uri fields (only works in csv mode):
+Output only the name and uri fields (only works in csv mode for the moment):
 
 ```shell
 scout search scotty --format csv --select name,uri
@@ -51,17 +65,16 @@ scout search scotty --format csv --select name,uri
 
 ![scout demo](https://i.imgur.com/cOPE7cz.gif)
 
-The repository contains a [telescope](https://github.com/nvim-telescope/telescope.nvim)
-extension in the `vim` directory that can be used to dynamically search for
-packages and open the selected one's Hackage url in the browser.
+The repository contains a
+[telescope](https://github.com/nvim-telescope/telescope.nvim) extension in the
+`vim` directory that can be used to dynamically search for packages and open
+the selected one's Hackage url in the browser.
 
-You can install the extension using [packer](https://github.com/wbthomason/packer.nvim):
+You can install the extension using
+[packer](https://github.com/wbthomason/packer.nvim):
 
 ```lua
-use {
-    'aloussase/scout',
-    rtp = 'vim'
-}
+use { 'aloussase/scout', rtp = 'vim' }
 ```
 
 And then load the extension:
@@ -69,11 +82,6 @@ And then load the extension:
 ```lua
 require('telescope').load_extension('scout')
 ```
-
-## Todo
-
-- [x] Different output formats
-- [ ] No color option
 
 ## License
 
