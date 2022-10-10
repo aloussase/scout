@@ -13,9 +13,8 @@ import           Control.Lens
 
 displayPackages :: FormatOptions -> [(Revision, PackageSearchResultInfo)] -> IO ()
 displayPackages opts packages =
-    let format = opts^.fmtDisplayFormat
-        limit = opts^.fmtOutputLimit
-        packages' = take limit packages
-    in case format of
-        Apt -> Apt.displayPackages opts packages'
-        Csv -> Csv.displayPackages opts packages'
+  let packages' = take (opts^.fmtOutputLimit) packages
+  in
+    case opts^.fmtDisplayFormat of
+      Apt -> Apt.displayPackages opts packages'
+      Csv -> Csv.displayPackages opts packages'

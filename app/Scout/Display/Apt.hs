@@ -13,23 +13,24 @@ import           System.Console.ANSI
 -- | Display a list of packages in `apt search` output style.
 displayPackages :: FormatOptions -> [(Revision, PackageSearchResultInfo)] -> IO ()
 displayPackages _ packages = forM_ packages $ \(revision, package) -> do
-    TIO.putStrLn $ package ^. name . display <> "/" <> revision
-    putInfos [ ("description", package^.description)
-        , ("downloads", tshow $ package^.downloads)
-        , ("votes", tshow $ package^.votes)
-        , ("last upload", tshow $ package^.lastUpload)
-        , ("uri", renderPackageUri package)
-        ]
-    putStrLn ""
+  TIO.putStrLn $ package ^. name . display <> "/" <> revision
+  putInfos
+    [ ("description", package^.description)
+    , ("downloads", tshow $ package^.downloads)
+    , ("votes", tshow $ package^.votes)
+    , ("last upload", tshow $ package^.lastUpload)
+    , ("uri", renderPackageUri package)
+    ]
+  putStrLn ""
 
 putInfos :: [(Text, Text)] -> IO ()
 putInfos = mapM_ (uncurry putInfo)
 
 putInfo :: Text -> Text -> IO ()
 putInfo key value = do
-    setSGR [ SetConsoleIntensity BoldIntensity , SetColor Foreground Vivid Green ]
-    TIO.putStr $ "  " <> key <> ": "
-    setSGR [ Reset ]
-    TIO.putStrLn value
+  setSGR [ SetConsoleIntensity BoldIntensity , SetColor Foreground Vivid Green ]
+  TIO.putStr $ "  " <> key <> ": "
+  setSGR [ Reset ]
+  TIO.putStrLn value
 
 
