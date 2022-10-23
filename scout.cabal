@@ -12,9 +12,9 @@ copyright:          Alexander Goussas 2022
 category:           Cli
 extra-source-files: README.md
 
-executable scout
-    main-is:          Main.hs
+library
     ghc-options:      -Wall -Wunused-packages -O2
+    exposed-modules:  Scout
     other-modules:
           Scout.Types
         , Scout.Display
@@ -25,7 +25,6 @@ executable scout
         , Scout.Options.Search
         , Scout.Requests
         , Scout.Util
-
     build-depends:
             base                              ^>=4.15.1.0
           , aeson                             >= 2.1.1 && < 2.2
@@ -38,7 +37,21 @@ executable scout
           , req                               >= 3.13.0 && < 3.14
           , text                              >= 1.2.4 && < 1.3
           , time                              >= 1.9.3 && < 1.10
-
-    hs-source-dirs:   app
+    hs-source-dirs:   lib
     default-language: Haskell2010
     default-extensions: OverloadedStrings, TemplateHaskell, DeriveGeneric, DataKinds, ScopedTypeVariables, TypeApplications
+
+executable scout
+    main-is:          Main.hs
+    ghc-options:      -Wall -Wunused-packages -O2
+    build-depends:    base, scout
+    hs-source-dirs:   app
+    default-language: Haskell2010
+
+test-suite test-scout
+    type:             exitcode-stdio-1.0
+    main-is:          TestScout.hs
+    ghc-options:      -Wall -Wunused-packages -O2
+    hs-source-dirs:   test
+    build-depends:    scout, base, hspec
+    default-language: Haskell2010

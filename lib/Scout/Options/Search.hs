@@ -9,10 +9,11 @@ module Scout.Options.Search
 where
 
 import           Control.Lens        (makeLenses)
+import           Data.Default.Class
 import           Data.Text           (Text)
 import           Options.Applicative
 
-data SortDirection = Asc | Desc
+data SortDirection = Asc | Desc deriving (Eq)
 
 instance Show SortDirection where
     show Asc  = "ascending"
@@ -22,7 +23,9 @@ data SearchOptions = MkSearchOptions
     { _searchQuery         :: !Text
     , _searchSortDirection :: !SortDirection
     }
-    deriving (Show)
+    deriving (Show, Eq)
+
+instance Default SearchOptions where def = MkSearchOptions mempty Desc
 
 parseSortDirection :: Parser SortDirection
 parseSortDirection = option (eitherReader parseSortDirection')

@@ -1,36 +1,37 @@
 module Scout.Options.Format
-(
-      parseFormatOptions
-    , DisplayFormat (..)
-    , DisplayField (..)
-    , FormatOptions
-    , fmtDisplayFormat
-    , fmtOutputLimit
-    , fmtDisplayFields
-)
-where
+  ( DisplayField (..)
+  , DisplayFormat (..)
+  , FormatOptions
+  , fmtDisplayFields
+  , fmtDisplayFormat
+  , fmtOutputLimit
+  , parseFormatOptions
+  ) where
 
 import           Control.Lens        (makeLenses)
+
+import           Data.Default.Class  (Default (def))
 import           Data.List           (foldl')
 import qualified Data.Text           as T
+
 import           Options.Applicative
 
 
-data DisplayFormat = Apt | Csv deriving Show
-data DisplayField = Description
-                    | Downloads
-                    | LastUpload
-                    | Name
-                    | Uri
-                    | Votes
-                    deriving Show
+data DisplayFormat = Apt | Csv deriving (Eq, Show)
+data DisplayField = Description | Downloads | LastUpload | Name | Uri | Votes deriving
+    ( Eq
+    , Show
+    )
 
-data FormatOptions = MkFormatOptions
-    { _fmtOutputLimit   :: !Int
-    , _fmtDisplayFormat :: !DisplayFormat
-    , _fmtDisplayFields :: ![DisplayField]
-    }
-    deriving Show
+data FormatOptions
+  = MkFormatOptions
+      { _fmtOutputLimit   :: !Int
+      , _fmtDisplayFormat :: !DisplayFormat
+      , _fmtDisplayFields :: ![DisplayField]
+      }
+  deriving (Eq, Show)
+
+instance Default FormatOptions where def = MkFormatOptions 10 Apt []
 
 makeLenses ''FormatOptions
 
