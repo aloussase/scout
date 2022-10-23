@@ -2,8 +2,7 @@ cabal-version:      3.0
 name:               scout
 version:            0.1.0.0
 synopsis:           Search packages in Hackage
--- A longer description of the package.
--- description:
+description:        Search packages in Hackage and list them in different formats
 bug-reports:        https://github.com/aloussase/scout/issues
 license:            MIT
 author:             Alexander Goussas
@@ -12,8 +11,12 @@ copyright:          Alexander Goussas 2022
 category:           Cli
 extra-source-files: README.md
 
+source-repository head
+    type:       git
+    location:   https://github.com/aloussase/scout
+
 library
-    ghc-options:      -Wall -Wunused-packages -O2
+    ghc-options:      -Wall -Wunused-packages
     exposed-modules:  Scout
     other-modules:
           Scout.Types
@@ -43,7 +46,7 @@ library
 
 executable scout
     main-is:          Main.hs
-    ghc-options:      -Wall -Wunused-packages -O2
+    ghc-options:      -Wall -Wunused-packages
     build-depends:    base, scout
     hs-source-dirs:   app
     default-language: Haskell2010
@@ -51,7 +54,7 @@ executable scout
 test-suite test-scout
     type:             exitcode-stdio-1.0
     main-is:          TestScout.hs
-    ghc-options:      -Wall -Wunused-packages -O2
+    ghc-options:      -Wall -Wunused-packages
     hs-source-dirs:   test
     build-depends:    scout, base, hspec
     default-language: Haskell2010

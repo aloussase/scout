@@ -1,39 +1,45 @@
 module Scout.Options
-(
-      getOptions
-    , Command (..)
-    , fmtDisplayFormat
-    , fmtOutputLimit
-    , formatOptions
-    , optCommand
-    , searchQuery
-    , searchSortDirection
-    , toOptions
-    , Options
-    , defaultOptions
-) where
+  ( Command (..)
+  , Options
+  , defaultOptions
+  , fmtDisplayFormat
+  , fmtOutputLimit
+  , formatOptions
+  , getOptions
+  , optCommand
+  , searchQuery
+  , searchSortDirection
+  , toOptions
+  ) where
+
+import           Control.Lens         (makeLenses)
+
+import           Data.Default.Class
+
+import           Options.Applicative
 
 import           Scout.Options.Format
 import           Scout.Options.Search
 
-import           Control.Lens         (makeLenses)
-import           Data.Default.Class
-import           Options.Applicative
 import           System.Environment   (getArgs)
 
-data Options = MkOptions
-    { _optCommand    :: !Command
-    , _formatOptions :: !FormatOptions
-    }
-    deriving (Show, Eq)
+-- | The program options.
+data Options
+  = MkOptions
+      { _optCommand    :: !Command
+      , _formatOptions :: !FormatOptions
+      }
+  deriving (Eq, Show)
 
 instance Default Options where def = MkOptions (SearchCommand def) def
 
+-- | 'defaultOptions' are the default options.
 defaultOptions :: Options
 defaultOptions = def
 
-newtype Command = SearchCommand SearchOptions
-    deriving (Show, Eq)
+newtype Command
+  = SearchCommand SearchOptions
+  deriving (Eq, Show)
 
 makeLenses ''Options
 
@@ -51,6 +57,7 @@ opts = info (parseOptions <**> helper)
         <> progDesc "Scout Hackage packages"
         <> header   "scout - CLI tool for scouting packages in Hackage")
 
+-- | 'toOptions' parses the provided list of command line arguments into an 'Options'.
 toOptions :: [String] -> Either String Options
 toOptions args =
     case execParserPure defaultPrefs opts args of
@@ -58,5 +65,6 @@ toOptions args =
         Failure failure -> Left $ show failure
         _               -> error "unexpected result"
 
+-- | 'getOptions' parses the list of command line arguments into an 'Options'.
 getOptions :: IO (Either String Options)
 getOptions = toOptions <$> getArgs
